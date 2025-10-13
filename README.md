@@ -79,9 +79,9 @@ Due to GitHub's file size limitations, the `lib` folders in ManusSDK are missing
 8. Nagivate to your desired teloperation script. In the listener_callback function, modify the formulas to match your individual range.
 
     The formula to normalize the value is:
-
-    $$
-    \frac{\text{ergo\_data.value} - \text{lower bound}}{\text{upper bound} - \text{lower bound}} * 100
-    $$
+    
+    <p align="center">
+      (<i>ergo_data.value</i> − <i>lower&nbsp;bound</i>) / (<i>upper&nbsp;bound</i> − <i>lower&nbsp;bound</i>) × 100
+    </p>
 
     You may have to perform additional adjustments due to the difference in grippers.
