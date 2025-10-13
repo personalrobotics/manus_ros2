@@ -4,8 +4,8 @@ This repository utilizes ROS2 and the Manus Gloves to control various grippers. 
 Tested on Ubuntu 22.04 with ROS2 Humble/Python 3.10
 
 We currently support the following grippers:
-- Alt-Bionic's Surge Hand
-- Psyonic's Ability Hand
+- [Alt-Bionic's Surge Hand](https://github.com/personalrobotics/surge-hand-api)
+- [Psyonic's Ability Hand](https://github.com/psyonicinc/ability-hand-api)
 
 ## Pre-Installation
 Due to GitHub's file size limitations, the `lib` folders in ManusSDK are missing. You will need to download `ManusSDK/lib` from the official Manus website. Copy and paste the contents into this repository's `manus_ros2/src/manus_ros2/ManusSDK/lib`.
