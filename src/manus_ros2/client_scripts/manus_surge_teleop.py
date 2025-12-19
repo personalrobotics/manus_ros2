@@ -21,13 +21,6 @@ from manus_ros2_msgs.msg import ManusGlove
 import sys
 import os
 
-# Add the surge_api python directory to path (relative path)
-script_dir = os.path.dirname(os.path.abspath(__file__))
-surge_python_dir = os.path.abspath(os.path.join(script_dir, '../../../../surge-hand-api/python'))
-sys.path.append(surge_python_dir)
-
-print(f"Adding to sys.path: {surge_python_dir}")  # Debugging
-
 from surge_wrapper import SurgeHand
 import numpy as np
 import random

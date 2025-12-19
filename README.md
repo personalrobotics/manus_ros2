@@ -1,5 +1,5 @@
 # Manus Teleoperation
-This repository utilizes ROS2 and the Manus Gloves to control various grippers. The `manus_ros2` package is from the official site, specifically Manus Core 3.0.1.
+This repository utilizes ROS2 and the Manus Gloves to control various grippers. The `manus_ros2` package is from the official site, specifically Manus Core 3.1,0.
 
 Tested on Ubuntu 22.04 with ROS2 Humble/Python 3.10
 
@@ -11,22 +11,56 @@ We currently support the following grippers:
 Due to GitHub's file size limitations, the `lib` folders in ManusSDK are missing. You will need to download `ManusSDK/lib` from the official Manus website. Copy and paste the contents into this repository's `manus_ros2/src/manus_ros2/ManusSDK/lib`.
 
 ## Quickstart
-1. Build the ROS2 package and source
-    ```
-    cd manus_ros2
-    source /opt/ros/humble/setup.bash
-    colcon build
-    source install/setup.bash
-    ```
+1. Clone this repository into your workspace
+```bash
+git clone https://github.com/personalrobotics/manus_ros2.git
+```
+2. Install dependencies
+```bash
+sudo apt-get update && sudo apt-get install -y build-essential git libtool libzmq3-dev libusb-1.0-0-dev zlib1g-dev libudev-dev gdb libncurses5-dev && sudo apt-get clean
+sudo git clone -b v1.28.1 https://github.com/grpc/grpc /var/local/git/grpc && cd /var/local/git/grpc && sudo git submodule update --init --recursive
+cd /var/local/git/grpc/third_party/protobuf && sudo ./autogen.sh && sudo ./configure --enable-shared && sudo make -j$(nproc) && sudo make -j$(nproc) check && sudo make install && sudo make clean && sudo ldconfig
+cd /var/local/git/grpc && sudo make -j$(nproc) && sudo make install && sudo make clean && sudo ldconfig
+pip install catkin_pkg 'empy<4' numpy lark mujoco
+```
+(optional depending on which hand(s) you're using)
+```bash
+cd your-workspace/src
+# Psyonic Ability Hand API
+git clone git@github.com:psyonicinc/ability-hand-api.git
+cd ability-hand-api/python
+pip install -e .
+export PYTHONPATH=$PYTHONPATH:path/to/ability-hand-api/python
+# Surge Hand API
+git clone https://github.com/personalrobotics/surge-hand-api.git
+export PYTHONPATH=$PYTHONPATH:path/to/surge-hand-api/python
+```
+
+3. To allow connections to MANUS hardware you need to place the following file in the etc/udev/rules.d/ directory. This will allow the devices to be recognized and accessed by the system. After doing this, a full reboot is recommended to apply the changes. The naming of the file is relevant we recommend naming it 70-manus-hid.rules.
+```bash
+# HIDAPI/libusb
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="3325", MODE:="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1915", ATTRS{idProduct}=="83fd", MODE:="0666"
+
+# HIDAPI/hidraw
+KERNEL=="hidraw*", ATTRS{idVendor}=="3325", MODE:="0666"
+```
+4. Build the ROS2 package and source
+```bash
+cd src/manus_ros2
+source /opt/ros/humble/setup.bash
+colcon build
+source install/setup.bash
+```
 2. Connect your Manus Glove(s) to your PC
 3. Run the Manus Data Publisher Node
-    ```
-    ros2 run manus_ros2 manus_data_publisher
-    ```
+```bash
+ros2 run manus_ros2 manus_data_publisher
+```
 4. Run the corresponding teleoperation script
-    ```
-    python src/manus_ros2/client_scripts/manus_surge_teleop.py
-    ```
+```bash
+python src/manus_ros2/client_scripts/manus_surge_teleop.py
+```
 
 
 ## Hand Scaling (with MANUS Gloves and ROS2)

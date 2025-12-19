@@ -9,3 +9,6 @@ __pycache__/
 *.pyc
 *.so
 config.py
+
+log.csv
+ability_hand.log
