@@ -8,35 +8,49 @@ We currently support the following grippers:
 - [Psyonic's Ability Hand](https://github.com/psyonicinc/ability-hand-api)
 
 ## Pre-Installation
-Due to GitHub's file size limitations, the `lib` folders in ManusSDK are missing. You will need to download `ManusSDK/lib` from the official Manus website. Copy and paste the contents into this repository's `manus_ros2/src/manus_ros2/ManusSDK/lib`.
+Due to GitHub's file size limitations, the `lib` folders in ManusSDK are missing. You will need to download the SDK to obtain `ManusSDK` from the [official Manus website](https://docs.manus-meta.com/3.1.0/Resources/). Copy and replace the contents of this repository's `manus_ros2/src/manus_ros2/ManusSDK`.
 
 ## Quickstart
 1. Clone this repository into your workspace
 ```bash
 git clone https://github.com/personalrobotics/manus_ros2.git
 ```
+2. If you haven't already, clone `ManusSDK/lib` into your workspace
+```bash
+sudo cp -r /path/to/MANUS_Core_3.1.0_SDK/ManusSDK_v3.1.0/ROS2/ManusSDK /path/to/your_workspace/src/manus_ros2/src/manus_ros2/
+```
 2. Install dependencies
 ```bash
 sudo apt-get update && sudo apt-get install -y build-essential git libtool libzmq3-dev libusb-1.0-0-dev zlib1g-dev libudev-dev gdb libncurses5-dev && sudo apt-get clean
+```
+```bash
 sudo git clone -b v1.28.1 https://github.com/grpc/grpc /var/local/git/grpc && cd /var/local/git/grpc && sudo git submodule update --init --recursive
+```
+```bash
 cd /var/local/git/grpc/third_party/protobuf && sudo ./autogen.sh && sudo ./configure --enable-shared && sudo make -j$(nproc) && sudo make -j$(nproc) check && sudo make install && sudo make clean && sudo ldconfig
+```
+```bash
 cd /var/local/git/grpc && sudo make -j$(nproc) && sudo make install && sudo make clean && sudo ldconfig
+```
+```bash
 pip install catkin_pkg 'empy<4' numpy lark mujoco
 ```
 (optional depending on which hand(s) you're using)
 ```bash
 cd your-workspace/src
+
 # Psyonic Ability Hand API
 git clone git@github.com:psyonicinc/ability-hand-api.git
 cd ability-hand-api/python
 pip install -e .
 export PYTHONPATH=$PYTHONPATH:path/to/ability-hand-api/python
+
 # Surge Hand API
 git clone https://github.com/personalrobotics/surge-hand-api.git
 export PYTHONPATH=$PYTHONPATH:path/to/surge-hand-api/python
 ```
 
-3. To allow connections to MANUS hardware you need to place the following file in the etc/udev/rules.d/ directory. This will allow the devices to be recognized and accessed by the system. After doing this, a full reboot is recommended to apply the changes. The naming of the file is relevant we recommend naming it 70-manus-hid.rules.
+3. To allow connections to MANUS hardware you need to place the following file in the etc/udev/rules.d/ directory. This will allow the devices to be recognized and accessed by the system. After doing this, a full reboot is recommended to apply the changes. The naming of the file is relevant we recommend naming it `70-manus-hid.rules`.
 ```bash
 # HIDAPI/libusb
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="3325", MODE:="0666"
